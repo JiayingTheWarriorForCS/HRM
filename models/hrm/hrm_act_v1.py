@@ -172,9 +172,20 @@ class HierarchicalReasoningModel_ACTV1_Inner(nn.Module):
         )
         
     def reset_carry(self, reset_flag: torch.Tensor, carry: HierarchicalReasoningModel_ACTV1InnerCarry):
+        # return HierarchicalReasoningModel_ACTV1InnerCarry(
+        #     z_H=torch.where(reset_flag.view(-1, 1, 1), self.H_init, carry.z_H),
+        #     z_L=torch.where(reset_flag.view(-1, 1, 1), self.L_init, carry.z_L),
+        # )
+        B = carry.z_H.shape[0]
+        T = self.config.seq_len + self.puzzle_emb_len
+        D = self.config.hidden_size
+    
+        H_init = self.H_init.view(1, 1, D).expand(B, T, D)
+        L_init = self.L_init.view(1, 1, D).expand(B, T, D)
+    
         return HierarchicalReasoningModel_ACTV1InnerCarry(
-            z_H=torch.where(reset_flag.view(-1, 1, 1), self.H_init, carry.z_H),
-            z_L=torch.where(reset_flag.view(-1, 1, 1), self.L_init, carry.z_L),
+            z_H=torch.where(reset_flag.view(-1, 1, 1), H_init, carry.z_H),
+            z_L=torch.where(reset_flag.view(-1, 1, 1), L_init, carry.z_L),
         )
 
     def forward(self, carry: HierarchicalReasoningModel_ACTV1InnerCarry, batch: Dict[str, torch.Tensor]) -> Tuple[HierarchicalReasoningModel_ACTV1InnerCarry, torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]:
