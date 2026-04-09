@@ -201,6 +201,10 @@ class HierarchicalReasoningModel_ACTV1_Inner(nn.Module):
         with torch.no_grad():
             z_H, z_L = carry.z_H, carry.z_L
 
+            T = input_embeddings.shape[1]
+            z_H = z_H[:, :T]
+            z_L = z_L[:, :T]
+
             for _H_step in range(self.config.H_cycles):
                 for _L_step in range(self.config.L_cycles):
                     if not ((_H_step == self.config.H_cycles - 1) and (_L_step == self.config.L_cycles - 1)):
