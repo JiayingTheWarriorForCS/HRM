@@ -190,7 +190,8 @@ class HierarchicalReasoningModel_ACTV1_Inner(nn.Module):
 
     def forward(self, carry: HierarchicalReasoningModel_ACTV1InnerCarry, batch: Dict[str, torch.Tensor]) -> Tuple[HierarchicalReasoningModel_ACTV1InnerCarry, torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]:
         seq_info = dict(
-            cos_sin=self.rotary_emb() if hasattr(self, "rotary_emb") else None,
+            cos_sin=self.rotary_emb()[:batch["inputs"].shape[1] + self.puzzle_emb_len]
+            if hasattr(self, "rotary_emb") else None,
         )
 
         # Input encoding
