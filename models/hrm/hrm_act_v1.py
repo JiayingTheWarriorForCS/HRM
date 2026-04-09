@@ -214,7 +214,18 @@ class HierarchicalReasoningModel_ACTV1_Inner(nn.Module):
                     z_H = self.H_level(z_H, z_L, **seq_info)
 
         assert not z_H.requires_grad and not z_L.requires_grad
-
+        print("=== DEBUG ===")
+        print("input_embeddings:", input_embeddings.shape)
+        print("z_H BEFORE slice:", carry.z_H.shape)
+        print("z_L BEFORE slice:", carry.z_L.shape)
+        
+        T = input_embeddings.shape[1]
+        z_H = z_H[:, :T]
+        z_L = z_L[:, :T]
+        
+        print("z_H AFTER slice:", z_H.shape)
+        print("z_L AFTER slice:", z_L.shape)
+        
         # 1-step grad
         z_L = self.L_level(z_L, z_H + input_embeddings, **seq_info)
         z_H = self.H_level(z_H, z_L, **seq_info)
