@@ -183,7 +183,7 @@ class HierarchicalReasoningModel_ACTV1_Inner(nn.Module):
         H_init = self.H_init.view(1, 1, D).expand(B, T, D)
         L_init = self.L_init.view(1, 1, D).expand(B, T, D)
 
-        device = carry.inner_carry.z_H.device
+        device = carry.z_H.device
 
         H_init = H_init.to(device)
         L_init = L_init.to(device)
