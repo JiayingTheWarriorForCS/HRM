@@ -182,6 +182,12 @@ class HierarchicalReasoningModel_ACTV1_Inner(nn.Module):
     
         H_init = self.H_init.view(1, 1, D).expand(B, T, D)
         L_init = self.L_init.view(1, 1, D).expand(B, T, D)
+
+        device = carry.z_H.device
+
+        H_init = H_init.to(device)
+        L_init = L_init.to(device)
+        reset_flag = reset_flag.to(device)
     
         return HierarchicalReasoningModel_ACTV1InnerCarry(
             z_H=torch.where(reset_flag.view(-1, 1, 1), H_init, carry.z_H),
