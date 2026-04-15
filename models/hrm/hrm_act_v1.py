@@ -271,8 +271,8 @@ class HierarchicalReasoningModel_ACTV1(nn.Module):
         return HierarchicalReasoningModel_ACTV1Carry(
             inner_carry=self.inner.empty_carry(batch_size),  # Empty is expected, it will be reseted in first pass as all sequences are halted.
             
-            steps = torch.zeros((batch_size,), dtype=torch.int32, device=device)
-            halted = torch.ones((batch_size,), dtype=torch.bool, device=device)
+            steps = torch.zeros((batch_size,), dtype=torch.int32, device=device),
+            halted = torch.ones((batch_size,), dtype=torch.bool, device=device),
             
             current_data={k: torch.empty_like(v) for k, v in batch.items()}
         )
