@@ -145,6 +145,9 @@ class HierarchicalReasoningModel_ACTV1_Inner(nn.Module):
 
     def _input_embeddings(self, input: torch.Tensor, puzzle_identifiers: torch.Tensor):
         # Token embedding
+        device = self.embed_tokens.embedding_weight.device
+
+        input = input.to(device)
         embedding = self.embed_tokens(input.to(torch.int32))
 
         # Puzzle embeddings
