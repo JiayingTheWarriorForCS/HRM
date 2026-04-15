@@ -200,6 +200,9 @@ class HierarchicalReasoningModel_ACTV1_Inner(nn.Module):
             if hasattr(self, "rotary_emb") else None,
         )
 
+        device = carry.z_H.device
+        batch = {k: v.to(device) for k, v in batch.items()}
+
         # Input encoding
         input_embeddings = self._input_embeddings(batch["inputs"], batch["puzzle_identifiers"])
 
@@ -273,7 +276,8 @@ class HierarchicalReasoningModel_ACTV1(nn.Module):
     def forward(self, carry: HierarchicalReasoningModel_ACTV1Carry, batch: Dict[str, torch.Tensor]) -> Tuple[HierarchicalReasoningModel_ACTV1Carry, Dict[str, torch.Tensor]]:
         # Update data, carry (removing halted sequences)
         new_inner_carry = self.inner.reset_carry(carry.halted, carry.inner_carry)
-        
+        device = carry.z_H.device
+        batch = {k: v.to(device) for k, v in batch.items()}
         new_steps = torch.where(carry.halted, 0, carry.steps)
 
         # new_current_data = {k: torch.where(carry.halted.view((-1, ) + (1, ) * (batch[k].ndim - 1)), batch[k], v) for k, v in carry.current_data.items()}
