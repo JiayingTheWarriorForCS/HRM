@@ -200,7 +200,7 @@ class HierarchicalReasoningModel_ACTV1_Inner(nn.Module):
             if hasattr(self, "rotary_emb") else None,
         )
 
-        device = carry.inner_carry.z_H.device
+        device = carry.z_H.device
         batch = {k: v.to(device) for k, v in batch.items()}
 
         # Input encoding
