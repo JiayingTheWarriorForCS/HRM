@@ -276,7 +276,7 @@ class HierarchicalReasoningModel_ACTV1(nn.Module):
     def forward(self, carry: HierarchicalReasoningModel_ACTV1Carry, batch: Dict[str, torch.Tensor]) -> Tuple[HierarchicalReasoningModel_ACTV1Carry, Dict[str, torch.Tensor]]:
         # Update data, carry (removing halted sequences)
         new_inner_carry = self.inner.reset_carry(carry.halted, carry.inner_carry)
-        device = carry.z_H.device
+        device = carry.inner_carry.z_H.device
         batch = {k: v.to(device) for k, v in batch.items()}
         new_steps = torch.where(carry.halted, 0, carry.steps)
 
